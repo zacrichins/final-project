@@ -10,14 +10,25 @@ gamename = '''
                                                                         
 '''
 
-
+import time
+def print_slow(text):
+	for char in text:
+		print(char, end='', flush=True)
+		time.sleep(0.03)
+	print()
 
 #introduction\
 print(gamename)
-print("You are Vasily Ignatenko, a rookie nuclear physicist. The date is April 26 1986 and you have just been promoted to work in the Chernobyl main control room.")
-print("Tonight you are being directed to run a mandatory energy test. Even though the preparations are not made, the Commander demands the test to be run.")
-print("The test failed. Disaster strikes. Reactor 4 has exploded.")
-print("Escape")
+print_slow("You are Vasily Ignatenko, a rookie nuclear physicist. The date is April 26 1986 and you have just been promoted to work in the Chernobyl main control room.")
+print_slow("Tonight you are being directed to run a mandatory energy test. Even though the preparations are not made, the Commander demands the test to be run.")
+print_slow("The test failed. Disaster strikes. Reactor 4 has exploded.")
+print_slow("Escape")
+
+
+inventory = []
+
+
+
 choice = ""
 choice = input("Press enter to continue")
 if choice == "":
@@ -37,5 +48,5 @@ if choice == "":
 	d - down 1 level
 	'''
 	print(commands)
-	print(reactorfourcontrolroom)
-	print("The commander has demanded that you go and find a dosimeter to find the amount of roengten(radiation per hour)")
+	print_slow(reactorfourcontrolroom)
+	print_slow("The commander has demanded that you go and find a dosimeter to find the amount of roengten(radiation per hour)")
