@@ -1,6 +1,6 @@
 #room details
-reactorfourcontrolroom = ("Reactor 4 control room: Large crescent shaped room where reactor 4 is monitored.")
-rfourhallway = ("Hallway from maint control room ")
+from rooms import Rooms
+reactorfourcontrolroom = "Reactor 4 control room: Large crescent shaped room where reactor 4 is monitored."
 gamename = '''
    ____   _   _   _____   ____    _   _    ___    ____   __   __  _     
   / ___| | | | | | ____| |  _ \  | \ | |  / _ \  | __ )  \ \ / / | |    
@@ -35,17 +35,17 @@ if choice == "":
 	print()
 	print()
 	commands = ''' 
-	Controls:
-	g - grab
-	t - interact
-	c - show controls
-	i - show inventory
-	n - north
-	e - east
-	s - south
-	w - west
-	u - up 1 level
-	d - down 1 level
+Controls:
+g - grab
+t - interact
+c - show controls
+i - show inventory
+n - north
+e - east
+s - south
+w - west
+u - up 1 level
+d - down 1 level
 	'''
 	print(commands)
 	print_slow(reactorfourcontrolroom)
