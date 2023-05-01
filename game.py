@@ -1,9 +1,8 @@
 #room details
-import rooms
+from rooms import Room
 
 reactorfourcontrolroom = "Reactor 4 control room: Large crescent shaped room where reactor 4 is monitored."
 mcrhallway = "Hallway from reactor 4 control room"
-swone = "Stairwell"
 br = "Break Room: There is a sandwhich on the table. "
 dcr = "Dosimetry Control Room: You notice a large dosimeter that is powerless."
 sr = "Storage room: There is a small dosimeter next to a dead body. The body is blood red and has warts and blisters all over. "
@@ -47,10 +46,10 @@ g - grab
 u - use
 c - show controls
 i - show inventory
-m- move
+m - move
 q - quit game
 s - save game	
-l = load game
+l - load game
 	''')
 
 print_slow(reactorfourcontrolroom)
@@ -59,15 +58,17 @@ print_slow("The commander has demanded that you go and find a dosimeter to find 
 class Player():
 	def __init__(self):
 		self.inventory = []
+		self.position = 0
 
 player = Player()
 def main(player):
 	commands()
 	choice = None
 	while choice != "q":
+		print(r.description())
 		choice = input("What is your choice:\n")
 		if choice == "g":
-			pass
+			player.grab_item(player)
 		elif choice == "u":
 			pass
 		elif choice == "c":
@@ -81,5 +82,5 @@ def main(player):
 		else:
 			print("Not valid choice")
 
-main()
+main(player)
 
