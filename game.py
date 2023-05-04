@@ -25,7 +25,7 @@ import time
 def print_slow(text):
 	for char in text:
 		print(char, end='', flush=True)
-		time.sleep(0.01)
+		time.sleep(0.001)
 	print()
 
 #introduction\
@@ -52,20 +52,22 @@ s - save game
 l - load game
 	''')
 
-print_slow(reactorfourcontrolroom)
-print_slow("The commander has demanded that you go and find a dosimeter to find the amount of roengten(radiation per hour)")
+
 
 class Player():
 	def __init__(self):
 		self.inventory = []
 		self.position = 0
+	def move(self):
+		pass
 
 player = Player()
 def main(player):
 	commands()
 	choice = None
 	while choice != "q":
-		print(r.description())
+		r = Room()
+		print(r.room_description)
 		choice = input("What is your choice:\n")
 		if choice == "g":
 			player.grab_item(player)

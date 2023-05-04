@@ -1,5 +1,5 @@
 class Room():
-	def __init__(self,):
+	def __init__(self):
 		self.room_name = {}
 		self.room_description = {}
 		self.room_items = []
@@ -12,11 +12,12 @@ class Room():
 			self.room_items.remove(pick)
 
 
-room = Room()
+
 #reactorfourcontrolroom
 r = Room()
 r.room_items.append("")
-r.room_description = "Reactor 4 control room: Large crescent shaped room where reactor 4 is monitored."
+r.room_description["Reactor 4 Control Room"] = "Large crescent shaped room where reactor 4 is monitored."
+r.allowed_movement.append("east")
 
 #controlroomhallway
 #break room
