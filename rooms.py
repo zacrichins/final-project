@@ -9,29 +9,30 @@ MOVEMENT = {1: "Reactor 4 control room: Large crescent shaped room where reactor
 
 class Room():
 	def __init__(self):
-		self.room_name = {}
 		self.room_description = {}
 		self.room_items = []
-		self.allowed_movement = []
+		self.allowed_movements = []
 	def grab_item(self, player):
 		pick = input("What item would you like to grab?\n")
-		if pick in self.room_items:
-			print(f"{pick} is now in your inventory.")
-			player.inventory.append(pick)
-			self.room_items.remove(pick)
+		print(f"{pick} is now in your inventory.")
+		player.inventory.append(pick)
 	def use_item(self, player):
 		print(f"Your Inventory:\n{player.inventory}")
 	def description(self):
 		print(rooms)
+	def allowed_movement(self):
+		print(self.allowed_movements)
 
 
-
+rooms ={}
 
 room = Room()
 #reactorfourcontrolroom
 r = Room()
-r.room_items.append("")
-r.room_description = "Reactor 4 control room: Large crescent shaped room where reactor 4 is monitored."
+r.allowed_movements.append("east")
+r.room_description["Reactor 4 Control Room"] = "Large crescent shaped room where reactor 4 is monitored."
+rooms[1] = "Reactor 4 control room: Large crescent shaped room where reactor 4 is monitored."
+
 
 #controlroomhallway
 #break room
