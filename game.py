@@ -1,5 +1,6 @@
 #room details
-from rooms import Room
+from rooms import Room, rooms
+import pickle
 
 reactorfourcontrolroom = "Reactor 4 control room: Large crescent shaped room where reactor 4 is monitored."
 mcrhallway = "Hallway from reactor 4 control room"
@@ -10,8 +11,6 @@ wpr = "Water pump room: There is about a foot of water on the ground and hundred
 gr = "Generator room: Tall open room. The generator only turns on when the power plant is not producing enough power. The generator is off."
 basementhallway = "Basement hallway: Your co-worker is crawling on the floor in serious pain"
 
-
-
 gamename = '''
    ____   _   _   _____   ____    _   _    ___    ____   __   __  _     
   / ___| | | | | | ____| |  _ \  | \ | |  / _ \  | __ )  \ \ / / | |    
@@ -20,15 +19,13 @@ gamename = '''
   \____| |_| |_| |_____| |_| \_\ |_| \_|  \___/  |____/    |_|   |_____|
                                                                         
 '''
-
 import time
 def print_slow(text):
 	for char in text:
 		print(char, end='', flush=True)
 		time.sleep(0.001)
 	print()
-
-#introduction\
+#introduction
 print(gamename)
 print_slow("You are Vasily Ignatenko, a rookie nuclear physicist. The date is April 26 1986 and you have just been promoted to work in the Chernobyl main control room.")
 print_slow("Tonight you are being directed to run a mandatory energy test. Even though the preparations are not made, the Commander demands the test to be run.")
@@ -52,22 +49,20 @@ s - save game
 l - load game
 	''')
 
-
+print_slow(reactorfourcontrolroom)
+print_slow("The commander has demanded that you go and find a dosimeter to find the amount of roengten(radiation per hour)")
 
 class Player():
 	def __init__(self):
 		self.inventory = []
 		self.position = 0
-	def move(self):
-		pass
 
 player = Player()
 def main(player):
 	commands()
 	choice = None
 	while choice != "q":
-		r = Room()
-		print(r.room_description)
+		print(r.description())
 		choice = input("What is your choice:\n")
 		if choice == "g":
 			player.grab_item(player)
@@ -79,6 +74,10 @@ def main(player):
 			pass
 		elif choice =="m":
 			pass
+		elif choice == "s":
+			save(player)
+		elif choice == "l":
+			load()
 		elif choice == "q":
 			print("Thanks for playing!")
 		else:
