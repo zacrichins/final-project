@@ -4,4 +4,4 @@ class Dog:
         print(name)
 
 d = Dog("Bill")
-d2 = Dog("tiommy")
+d2 = Dog("tommy")
