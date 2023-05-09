@@ -13,7 +13,7 @@ import time
 def print_slow(text):
 	for char in text:
 		print(char, end='', flush=True)
-		time.sleep(0.01)
+		time.sleep(0.0001)
 	print()
 
 print(gamename)
@@ -58,7 +58,12 @@ class GameMap:
 		self.current_room = rooms[0]
 
 	def move(self, direction):
-		new_room = self.current_room.get_exit(direction)
+		new_room_id = self.current_room.get_exit(direction)
+		new_room = None
+		for room in self.rooms:
+			if room.id == new_room_id:
+				new_room = room
+				break
 		if new_room is None:
 			print("You cannot go that way")
 		else:
@@ -67,18 +72,11 @@ class GameMap:
 	def get_current_room_description(self):
 		return self.current_room.description
 
-reactorfourcontrolroom = "Reactor 4 control room: Large crescent shaped room where reactor 4 is monitored."
-mcrhallway = "Hallway from reactor 4 control room"
-br = "Break Room: There is a sandwhich on the table. "
-dcr = "Dosimetry Control Room: You notice a large dosimeter that is powerless."
-sr = "Storage room: There is a small dosimeter next to a dead body. The body is blood red and has warts and blisters all over. "
-wpr = "Water pump room: There is about a foot of water on the ground and hundreds of water pumps all with levers and switches."
-gr = "Generator room: Tall open room. The generator only turns on when the power plant is not producing enough power. The generator is off."
-basementhallway = "Basement hallway: Your co-worker is crawling on the floor in serious pain"
 
-room1 = Room(1, "Kitchen", "You are in a large kitchen with a long dining table in the center.", {"north": None, "south": 2, "east": None, "west": None})
-room2 = Room(2, "Living Room", "You are in a spacious living room with a fireplace and a big sofa.", {"north": 1, "south": 3, "east": None, "west": None})
-room3 = Room(3, "Bedroom", "You are in a cozy bedroom with a comfortable bed and a small window.", {"north": 2, "south": None, "east": None, "west": None})
+
+room1 = Room(1, "Reactor 4 control room", "\n\nReactor 4 control room: Large crescent shaped room where reactor 4 is monitored.\nExits: south", {"north": None, "south": 2, "east": None, "west": None})
+room2 = Room(2, "Break Room", "\n\nBreak Room: There is a sandwhich on the table.\nExits: north, south", {"north": 1, "south": 3, "east": None, "west": None})
+room3 = Room(3, "Dosimetry Control Room", "\n\nDosimetry Control Room: You notice a large dosimeter that is powerless.\nExits: north", {"north": 2, "south": None, "east": None, "west": None})
 
 game_map = GameMap([room1, room2, room3])
 
@@ -108,7 +106,8 @@ def main(player):
 		elif choice =="i":
 			pass
 		elif choice =="m":
-			pass
+			direction = input("Which direction would you like to move?\n")
+			game_map.move(direction)
 		elif choice == "s":
 			save(player)
 		elif choice == "l":
