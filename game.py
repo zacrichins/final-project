@@ -43,19 +43,26 @@ l - load game
 
 #main code
 class Room:
-	def __init__(self, id, name, description, exits):
+	def __init__(self, id, name, description, exits, items):
 		self.id = id
 		self.name = name
 		self.description = description
 		self.exits = exits
-
+		self.items = items
 	def get_exit(self, direction):
 		return self.exits.get(direction)
+	
+	def use_item(self, player):
+		pass
+	def show_inventory(self, player):
+		print(f"{player.inventory}")
 
-class GameMap:
+
+class GameMap(Room):
 	def __init__(self, rooms):
 		self.rooms = rooms
 		self.current_room = rooms[0]
+		super().
 
 	def move(self, direction):
 		new_room_id = self.current_room.get_exit(direction)
@@ -71,45 +78,66 @@ class GameMap:
 
 	def get_current_room_description(self):
 		return self.current_room.description
-
-
-
-room1 = Room(1, "Reactor 4 control room", "\n\nReactor 4 control room: Large crescent shaped room where reactor 4 is monitored.\nExits: south", {"north": None, "south": 2, "east": None, "west": None})
-room2 = Room(2, "Break Room", "\n\nBreak Room: There is a sandwhich on the table.\nExits: north, south", {"north": 1, "south": 3, "east": None, "west": None})
-room3 = Room(3, "Dosimetry Control Room", "\n\nDosimetry Control Room: You notice a large dosimeter that is powerless.\nExits: north", {"north": 2, "south": None, "east": None, "west": None})
-
-game_map = GameMap([room1, room2, room3])
-
+	def grab(self, player):
+		if self.items:
+			pick = input("What would you like to grab?\n").lower()
+			if pick in self.items:
+				print(f"You picked up {pick}")
+				player.inventory.append(pick)
+				self.items = ""
+			else:
+				print(f"{pick} is not in the room")
+		else:
+			print("Nothing to grab")
 
 class Player():
 	def __init__(self):
 		self.inventory = []
-		self.position = 0
-def save(player):
-	pass
+	def use(self):
+		pass
+
+
+room1 = Room(1, "Reactor 4 control room", "\n\nReactor 4 control room: Large crescent shaped room where reactor 4 is monitored.\nExits: south", {"north": None, "south": 2, "east": None, "west": None}, None)
+room2 = Room(2, "Break Room", "\n\nBreak Room: There is a sandwhich on the table.\nExits: north, south", {"north": 1, "south": 3, "east": None, "west": None}, "Sandwhich")
+room3 = Room(3, "Dosimetry Control Room", "\n\nDosimetry Control Room: You notice a large dosimeter that is powerless.\nExits: north, east", {"north": 2, "south": None, "east": 4, "west": None}, None)
+room4 = Room(4, "Storage Room", "\n\nStorage Room: there is a small dosimeter next to a dead body.\nExits: west, south", {"north": None, "south": 5, "east": 3, "west": None}, "dosimeter")
+room5 = Room(5, "Water Pump Room", "Water Pump Rooom: there is about a foot of water on the ground and pumps and levers all over", {"north": 4, "south": None, "east": None, "west": None}, None)
+
+game_map = GameMap([room1, room2, room3, room4])
+
+def save():
+	with open("save.dat", "wb") as file:
+		pickle.dump(Player, file)
+		pickle.dump(GameMap, file)
+		pickle.dump(Room, file)
+		print("Game Saved")
 def load():
-	pass
+	try:
+		with open("save.dat","rb") as file:
+			pickle.load(file)
+	except FileNotFoundError:
+		print("File not found")
 
 player = Player()
-def main(player):
+def main():
 	commands()
 	choice = None
 	while choice != "q":
 		print(game_map.get_current_room_description())
 		choice = input("What is your choice:\n")
 		if choice == "g":
-			pass
+			game_map.grab(player)
 		elif choice == "u":
-			pass
+			game_map.use_item(player)
 		elif choice == "c":
 			commands()
 		elif choice =="i":
-			pass
+			game_map.show_inventory(player)
 		elif choice =="m":
-			direction = input("Which direction would you like to move?\n")
+			direction = input("Which direction would you like to move?\n").lower()
 			game_map.move(direction)
 		elif choice == "s":
-			save(player)
+			save()
 		elif choice == "l":
 			load()
 		elif choice == "q":
@@ -117,5 +145,5 @@ def main(player):
 		else:
 			print("Not valid choice")
 
-main(player)
+main()
 
