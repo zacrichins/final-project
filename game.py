@@ -99,8 +99,6 @@ def grab():
 			inventory.append(pick)
 			items.remove(pick)
 			print_slow2(f"You grabbed {pick}")
-			new_room2 = Room(2, "Break Room", "\n\nBreak Room: There is no longer a sandwhich on the table.\nExits: north, south", {"north": 1, "south": 3, "east": None, "west": None})
-			game_map = GameMap([room1, new_room2, room3, room4, room5, room6, room7, room8])
 		else:
 			print("That item doesn't exist")
 	elif game_map.current_room.id == 3:
@@ -109,9 +107,6 @@ def grab():
 			inventory.append(pick)
 			items.remove(pick)
 			print_slow2(f"You grabbed {pick}")
-			room3 = Room(3, "Dosimetry Control Room", "\n\nDosimetry Control Room: You notice a large dosimeter that is powerless and another small dosimeter you can grab.\nExits: north, east", {"north": 2, "south": None, "east": 4, "west": None})
-			return room3
-			return game_map.get_current_room_description()
 		else:
 			print("That item doesn't exist")
 	elif game_map.current_room.id == 4:
@@ -127,14 +122,11 @@ def grab():
 
 
 def use():
-	game_map.get_current_room_description()
+	global game_map
 	if game_map.current_room.id == 1:
 		if "dosimeter" in inventory:
 			print_slow2("You give the dosimeter to the Commmander and he says everything is fine. The radiation levels are normal but you think otherwise.")
 			inventory.remove("dosimeter")
-			room1 = Room(1, "Reactor 4 control room", "\n\nReactor 4 control room: Large crescent shaped room where reactor 4 is monitored. The Commander no longer needs a dosimeter.\nExits: south", {"north": None, "south": 2, "east": None, "west": None})
-			return room1
-			return game_map.get_current_room_description()
 		else:
 			print("You have nothing to use")
 	elif game_map.current_room.id == 6:
@@ -142,9 +134,6 @@ def use():
 			print_slow2("You use the power switch on the generator and the lights turn on in the room. You now notice a piece of paper with a code on it. You grab the paper.")
 			inventory.remove("power switch")
 			inventory.append("paper")
-			room6 = Room(6, "Generator Room", "\n\nGenerator room: Tall open room. The generator has been turned on. You now have a paper with a code on it\nExits: south, east", {"north": None, "south": 7, "east": 5, "west": None})
-			return room6
-			return game_map.get_current_room_description()
 		else:
 			print("You have nothing to use")
 	elif game_map.current_room.id == 7:
@@ -152,15 +141,11 @@ def use():
 			print_slow2("You gave the sandwhich to your coworker. He may have a chance of surviving. He gives you a key")
 			inventory.append("key")
 			inventory.remove("sandwhich")
-			room7 = Room(7, "Basement Hallway", "\n\nBasement hallway: Your co-worker is feeling better. Remember, he gave you a key to express his gratitude.\nExits: north, west", {"north": 6, "south": None, "east": None, "west":8})
-			return room7
-			return game_map.get_current_room_description()
 		else:
 			print("You have nothing to use")
 	elif game_map.current_room.id == 8:
 		if "key" and "paper" in inventory:
 			print_slow2("You escaped Chernobyl...")
-			room8 = Room(8, "Exit Room", "\n\nYou have escaped Chernobyl...", {"north": None, "south":None, "east": None, "west":None})
 			win = True
 			return win
 
@@ -174,23 +159,27 @@ def use():
 
 def save():
 	with open("save.dat", "wb") as file:
-		pickle.dump(GameMap, file)
-		pickle.dump(Room, file)
+		pickle.dump(game_map, file)
+		pickle.dump(inventory, file)
+		pickle.dump(items, file)
 		print("Game Saved")
 def load():
 	try:
 		with open("save.dat","rb") as file:
-			pickle.load(file)
+			inventory = pickle.load(file)
+			game_map = pickle.load(file)
+			items = pickle.load(file)
+			print("Game Loaded")
 	except FileNotFoundError:
 		print("File not found")
 
-
+#game loop
 def main():
 	commands()
 	choice = None
 	while choice != "q":
 		print(game_map.get_current_room_description())
-		choice = input("What is your choice:\n")
+		choice = input("What is your choice:\n").lower()
 		if choice == "g":
 			grab()
 		elif choice == "u":
