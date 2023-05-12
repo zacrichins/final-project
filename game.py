@@ -13,7 +13,12 @@ import time
 def print_slow(text):
 	for char in text:
 		print(char, end='', flush=True)
-		time.sleep(0.0001)
+		time.sleep(0.01)
+	print()
+def print_slow2(text):
+	for char in text:
+		print(char, end='', flush=True)
+		time.sleep(0.05)
 	print()
 
 print(gamename)
@@ -48,7 +53,6 @@ class Room:
 		self.name = name
 		self.description = description
 		self.exits = exits
-		self.room_items = []
 
 	def get_exit(self, direction):
 		return self.exits.get(direction)
@@ -74,10 +78,10 @@ class GameMap:
 		return self.current_room.description
 
 room1 = Room(1, "Reactor 4 control room", "\n\nReactor 4 control room: Large crescent shaped room where reactor 4 is monitored. The Commander wants you to go find a dosimeter.\nExits: south", {"north": None, "south": 2, "east": None, "west": None})
-room2 = Room(2, "Break Room", "\n\nBreak Room: There is a sandwhich on the table.\nExits: north, south", {"north": 1, "south": 3, "east": None, "west": None})
+room2 = Room(2, "Break Room", "\n\nBreak Room: There is a SANDWHICH on the table.\nExits: north, south", {"north": 1, "south": 3, "east": None, "west": None})
 
-room3 = Room(3, "Dosimetry Control Room", "\n\nDosimetry Control Room: You notice a large dosimeter that is powerless and another small dosimeter you can grab.\nExits: north, east", {"north": 2, "south": None, "east": 4, "west": None})
-room4 = Room(4, "Storage Room", "\n\nStorage Room: there is a power switch next to a dead body.\nExits: west, south", {"north": None, "south": 5, "east": 3, "west": None})
+room3 = Room(3, "Dosimetry Control Room", "\n\nDosimetry Control Room: You notice a large dosimeter that is powerless and another small DOSIMETER you can grab.\nExits: north, east", {"north": 2, "south": None, "east": 4, "west": None})
+room4 = Room(4, "Storage Room", "\n\nStorage Room: there is a POWER SWITCH next to a dead body.\nExits: west, south", {"north": None, "south": 5, "east": 3, "west": None})
 
 room5 = Room(5, "Water Pump Room", "\n\nWater Pump Rooom: there is about a foot of water on the ground and pumps and levers all over.\nExits: north, west", {"north": 4, "south": None, "east": None, "west": 6})
 room6 = Room(6, "Generator Room", "\n\nGenerator room: Tall open room. The generator needs to be turned on, it needs a power switch.\nExits: south, east", {"north": None, "south": 7, "east": 5, "west": None})
@@ -87,16 +91,16 @@ room8 = Room(8, "Exit Room", "\n\nExit Room: There is a solid metal door. You ne
 game_map = GameMap([room1, room2, room3, room4, room5, room6, room7, room8])
 
 items = ["dosimeter", "sandwhich", "power switch"]
-inventory =[]
+inventory = []
 def grab():
-	game_map.get_current_room_description()
-	
 	if game_map.current_room.id == 2:
 		pick = input("What item would you like to grab?\n").lower()
 		if pick in items and pick == "sandwhich":
 			inventory.append(pick)
 			items.remove(pick)
-			print(f"You grabbed {pick}")
+			print_slow2(f"You grabbed {pick}")
+			new_room2 = Room(2, "Break Room", "\n\nBreak Room: There is no longer a sandwhich on the table.\nExits: north, south", {"north": 1, "south": 3, "east": None, "west": None})
+			game_map = GameMap([room1, new_room2, room3, room4, room5, room6, room7, room8])
 		else:
 			print("That item doesn't exist")
 	elif game_map.current_room.id == 3:
@@ -104,7 +108,10 @@ def grab():
 		if pick in items and pick == "dosimeter":
 			inventory.append(pick)
 			items.remove(pick)
-			print(f"You grabbed {pick}")
+			print_slow2(f"You grabbed {pick}")
+			room3 = Room(3, "Dosimetry Control Room", "\n\nDosimetry Control Room: You notice a large dosimeter that is powerless and another small dosimeter you can grab.\nExits: north, east", {"north": 2, "south": None, "east": 4, "west": None})
+			return room3
+			return game_map.get_current_room_description()
 		else:
 			print("That item doesn't exist")
 	elif game_map.current_room.id == 4:
@@ -112,7 +119,7 @@ def grab():
 		if pick in items and pick == "power switch":
 			inventory.append(pick)
 			items.remove(pick)
-			print(f"You grabbed {pick}")
+			print_slow2(f"You grabbed {pick}")
 		else:
 			print("That item doesn't exist")
 	else:
@@ -123,34 +130,47 @@ def use():
 	game_map.get_current_room_description()
 	if game_map.current_room.id == 1:
 		if "dosimeter" in inventory:
-			print("You give the dosimeter to the Commmander and he says everything is fine. The radiation levels are normal but you think otherwise.")
+			print_slow2("You give the dosimeter to the Commmander and he says everything is fine. The radiation levels are normal but you think otherwise.")
 			inventory.remove("dosimeter")
+			room1 = Room(1, "Reactor 4 control room", "\n\nReactor 4 control room: Large crescent shaped room where reactor 4 is monitored. The Commander no longer needs a dosimeter.\nExits: south", {"north": None, "south": 2, "east": None, "west": None})
+			return room1
+			return game_map.get_current_room_description()
 		else:
 			print("You have nothing to use")
 	elif game_map.current_room.id == 6:
 		if "power switch" in inventory:
-			print("You use the power switch on the generator and the lights turn on in the room. You now notice a piece of paper with a code on it. You grab the paper.")
+			print_slow2("You use the power switch on the generator and the lights turn on in the room. You now notice a piece of paper with a code on it. You grab the paper.")
 			inventory.remove("power switch")
 			inventory.append("paper")
-
+			room6 = Room(6, "Generator Room", "\n\nGenerator room: Tall open room. The generator has been turned on. You now have a paper with a code on it\nExits: south, east", {"north": None, "south": 7, "east": 5, "west": None})
+			return room6
+			return game_map.get_current_room_description()
+		else:
+			print("You have nothing to use")
 	elif game_map.current_room.id == 7:
 		if "sandwhich" in inventory:
-			print("You gave the sandwhich to your coworker. He may have a chance of surviving. He gives you a key")
+			print_slow2("You gave the sandwhich to your coworker. He may have a chance of surviving. He gives you a key")
 			inventory.append("key")
 			inventory.remove("sandwhich")
+			room7 = Room(7, "Basement Hallway", "\n\nBasement hallway: Your co-worker is feeling better. Remember, he gave you a key to express his gratitude.\nExits: north, west", {"north": 6, "south": None, "east": None, "west":8})
+			return room7
+			return game_map.get_current_room_description()
 		else:
 			print("You have nothing to use")
 	elif game_map.current_room.id == 8:
-		end = False
 		if "key" and "paper" in inventory:
-			print("You escaped Chernobyl...")
-			end = True
-			
+			print_slow2("You escaped Chernobyl...")
+			room8 = Room(8, "Exit Room", "\n\nYou have escaped Chernobyl...", {"north": None, "south":None, "east": None, "west":None})
+			win = True
+			return win
+
 		else:
 			print("You don't have both the key and paper")
 	
 	else:
 		print("You can't use any items in this room")
+
+
 
 def save():
 	with open("save.dat", "wb") as file:
@@ -174,10 +194,8 @@ def main():
 		if choice == "g":
 			grab()
 		elif choice == "u":
-			use()
-			end = use()
-			if end == True:
-				choice = "q"
+			win = use()
+			if win == True:
 				break
 		elif choice == "c":
 			commands()
