@@ -89,7 +89,7 @@ room7 = Room(7, "Basement Hallway", "\n\nBasement hallway: Your co-worker is cra
 room8 = Room(8, "Exit Room", "\n\nExit Room: There is a solid metal door. You need a key and paper with code to escape\nExits: east", {"north": None, "south":None, "east": 7, "west":None})
 
 game_map = GameMap([room1, room2, room3, room4, room5, room6, room7, room8])
-
+ 
 items = ["dosimeter", "sandwhich", "power switch"]
 inventory = []
 def grab():
